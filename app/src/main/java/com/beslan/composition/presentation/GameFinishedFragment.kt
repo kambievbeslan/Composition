@@ -33,13 +33,12 @@ class GameFinishedFragment : Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
-            object : OnBackPressedCallback(true){
-                override fun handleOnBackPressed() {
-                    retryGame()
-                }
+        val callback = object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                retryGame()
             }
-        )
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
     override fun onDestroyView() {
         super.onDestroyView()
@@ -51,7 +50,9 @@ class GameFinishedFragment : Fragment(){
     }
 
     private fun retryGame() {
-        requireActivity().supportFragmentManager.popBackStack(GameFragment.NAME, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        requireActivity().supportFragmentManager.popBackStack(
+            GameFragment.NAME,
+            FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
     companion object {
 
