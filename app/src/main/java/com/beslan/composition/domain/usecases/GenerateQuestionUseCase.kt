@@ -2,8 +2,9 @@ package com.beslan.composition.domain.usecases
 
 import com.beslan.composition.domain.entity.Question
 import com.beslan.composition.domain.repository.GameRepository
+import javax.inject.Inject
 
-class GenerateQuestionUseCase(
+class GenerateQuestionUseCase @Inject constructor(
     private val repository: GameRepository
 ) {
     operator fun invoke(maxSumValue: Int): Question {

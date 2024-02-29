@@ -1,32 +1,26 @@
 package com.beslan.composition.presentation
 
 import android.app.Application
-import android.content.Context
 import android.os.CountDownTimer
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.beslan.composition.R
-import com.beslan.composition.data.GameRepositoryImpl
 import com.beslan.composition.domain.entity.GameResult
 import com.beslan.composition.domain.entity.GameSettings
 import com.beslan.composition.domain.entity.Level
 import com.beslan.composition.domain.entity.Question
 import com.beslan.composition.domain.usecases.GenerateQuestionUseCase
 import com.beslan.composition.domain.usecases.GetGameSettingsUseCase
+import javax.inject.Inject
 
-class GameViewModel(
+class GameViewModel @Inject constructor(
     private val application: Application,
-    private val level: Level
+    private val generateQuestionUseCase: GenerateQuestionUseCase,
+    private val getGameSettingsUseCase: GetGameSettingsUseCase,
 ) : ViewModel() {
 
     private lateinit var gameSettings: GameSettings
-
-    private val repository = GameRepositoryImpl
-
-    private val generateQuestionUseCase = GenerateQuestionUseCase(repository)
-    private val getGameSettingsUseCase = GetGameSettingsUseCase(repository)
 
     private var timer: CountDownTimer? = null
 
@@ -65,12 +59,9 @@ class GameViewModel(
     private var countOfRightAnswers = 0
     private var countOfQuestions = 0
 
-    init {
-        startGame()
-    }
 
-    private fun startGame() {
-        getGameSettings()
+    fun startGame(level: Level) {
+        getGameSettings(level)
         startTimer()
         generateQuestion()
         updateProgress()
@@ -109,7 +100,7 @@ class GameViewModel(
         countOfQuestions++
     }
 
-    private fun getGameSettings() {
+    private fun getGameSettings(level: Level) {
         this.gameSettings = getGameSettingsUseCase(level)
         _minPercent.value = gameSettings.minPercentOfRightAnswers
     }

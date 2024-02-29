@@ -4,14 +4,13 @@ import com.beslan.composition.domain.entity.GameSettings
 import com.beslan.composition.domain.entity.Level
 import com.beslan.composition.domain.entity.Question
 import com.beslan.composition.domain.repository.GameRepository
+import javax.inject.Inject
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.random.Random
 
-object GameRepositoryImpl : GameRepository {
+class GameRepositoryImpl @Inject constructor(): GameRepository {
 
-    private const val MIN_SUM_VALUE = 2
-    private const val MIN_ANSWER_VALUE = 1
     override fun generateQuestion(maxSumValue: Int, countOfOptions: Int): Question {
         val sum = Random.nextInt(MIN_SUM_VALUE, maxSumValue + 1)
         val visibleNumber = Random.nextInt(MIN_ANSWER_VALUE, sum)
@@ -41,5 +40,10 @@ object GameRepositoryImpl : GameRepository {
                 GameSettings(30,30,90,40)
             }
         }
+    }
+
+    companion object {
+        private const val MIN_SUM_VALUE = 2
+        private const val MIN_ANSWER_VALUE = 1
     }
 }
